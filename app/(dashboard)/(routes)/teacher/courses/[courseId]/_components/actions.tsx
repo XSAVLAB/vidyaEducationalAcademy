@@ -45,7 +45,7 @@ export const Actions = ({
       setIsLoading(false);
     }
   }
-  
+
   const onDelete = async () => {
     try {
       setIsLoading(true);
