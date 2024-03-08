@@ -5,6 +5,7 @@ export const Logo = () => {
     <Image
       height={200}
       width={200}
+      priority
       alt="logo"
       src="/logo.webp"
     />

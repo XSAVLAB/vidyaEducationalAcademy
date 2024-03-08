@@ -44,7 +44,7 @@ export const ChapterActions = ({
       setIsLoading(false);
     }
   }
-  
+
   const onDelete = async () => {
     try {
       setIsLoading(true);
@@ -65,7 +65,6 @@ export const ChapterActions = ({
     <div className="flex items-center gap-x-2">
       <Button
         onClick={onClick}
-        disabled={disabled || isLoading}
         variant="outline"
         size="sm"
       >
