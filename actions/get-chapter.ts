@@ -5,7 +5,7 @@ interface GetChapterProps {
   userId: string;
   courseId: string;
   chapterId: string;
-};
+}
 
 export const getChapter = async ({
   userId,
@@ -19,7 +19,7 @@ export const getChapter = async ({
           userId,
           courseId,
         }
-      }
+      } 
     });
 
     const course = await db.course.findUnique({
@@ -43,7 +43,6 @@ export const getChapter = async ({
       throw new Error("Chapter or course not found");
     }
 
-    let muxData = null;
     let attachments: Attachment[] = [];
     let nextChapter: Chapter | null = null;
 
@@ -55,13 +54,19 @@ export const getChapter = async ({
       });
     }
 
-    if (chapter.isFree || purchase) {
-      muxData = await db.muxData.findUnique({
-        where: {
-          chapterId: chapterId,
-        }
-      });
+    let videoUrl: string | null = null;
 
+    if (chapter.isFree || purchase) {
+      // Here, you would fetch video data from the YouTube API based on the YouTube video ID stored in your database
+      // For demonstration purposes, let's assume that the YouTube video ID is stored in the videoUrl field of the Chapter model
+      const youtubeVideoId = chapter.videoUrl;
+      
+      // Construct the YouTube video URL
+      if (youtubeVideoId) {
+        videoUrl = `https://www.youtube.com/watch?v=${youtubeVideoId}`;
+      }
+
+      // Fetch next chapter
       nextChapter = await db.chapter.findFirst({
         where: {
           courseId: courseId,
@@ -88,7 +93,7 @@ export const getChapter = async ({
     return {
       chapter,
       course,
-      muxData,
+      videoUrl,
       attachments,
       nextChapter,
       userProgress,
@@ -99,11 +104,11 @@ export const getChapter = async ({
     return {
       chapter: null,
       course: null,
-      muxData: null,
+      videoUrl: null,
       attachments: [],
       nextChapter: null,
       userProgress: null,
       purchase: null,
-    }
+    };
   }
-}
+};

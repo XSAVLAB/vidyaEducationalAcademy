@@ -1,13 +1,6 @@
-import Mux from "@mux/mux-node";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-
 import { db } from "@/lib/db";
-
-const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID!,
-  process.env.MUX_TOKEN_SECRET!,
-);
 
 export async function DELETE(
   req: Request,
@@ -42,22 +35,13 @@ export async function DELETE(
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (chapter.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: params.chapterId,
-        }
-      });
-
-      if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          }
-        });
-      }
-    }
+    // Delete any related data or perform cleanup tasks here
+    // For example, you can delete attachments associated with the chapter
+    await db.attachment.deleteMany({
+      where: {
+        chapterId: params.chapterId,
+      },
+    });
 
     const deletedChapter = await db.chapter.delete({
       where: {
@@ -96,7 +80,7 @@ export async function PATCH(
 ) {
   try {
     const { userId } = auth();
-    const { isPublished, ...values } = await req.json();
+    const { isPublished, videoUrl, ...values } = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -123,40 +107,28 @@ export async function PATCH(
       }
     });
 
-    if (values.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: params.chapterId,
-        }
-      });
-
-      if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          }
+    if (videoUrl) {
+      const embedUrl = getYouTubeEmbedUrl(videoUrl);
+      if (embedUrl) {
+        await db.chapter.update({
+          where: { id: params.chapterId },
+          data: { videoEmbedUrl: embedUrl },
         });
       }
-
-      const asset = await Video.Assets.create({
-        input: values.videoUrl,
-        playback_policy: "public",
-        test: false,
-      });
-
-      await db.muxData.create({
-        data: {
-          chapterId: params.chapterId,
-          assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id,
-        }
-      });
     }
 
     return NextResponse.json(chapter);
   } catch (error) {
     console.log("[COURSES_CHAPTER_ID]", error);
     return new NextResponse("Internal Error", { status: 500 });
+  }
+}
+
+function getYouTubeEmbedUrl(videoUrl: string): string | null {
+  const videoId = videoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId[1]}`;
+  } else {
+    return null; // Return null if video URL is not a valid YouTube URL
   }
 }

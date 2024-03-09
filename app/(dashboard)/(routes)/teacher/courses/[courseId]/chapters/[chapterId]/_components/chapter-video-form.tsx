@@ -1,105 +1,58 @@
-"use client";
-
-import * as z from "zod";
-import axios from "axios";
-import MuxPlayer from "@mux/mux-player-react";
-import { Pencil, PlusCircle, Video } from "lucide-react";
 import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { Chapter, MuxData } from "@prisma/client";
-import Image from "next/image";
-
+import { toast } from "react-hot-toast";
+import { TextInput } from "@/components/ui/text-input";
 import { Button } from "@/components/ui/button";
-import { FileUpload } from "@/components/file-upload";
 
 interface ChapterVideoFormProps {
-  initialData: Chapter & { muxData?: MuxData | null };
-  courseId: string;
+  initialData: {
+    videoUrl: string;
+  };
   chapterId: string;
-};
-
-const formSchema = z.object({
-  videoUrl: z.string().min(1),
-});
+  courseId: string;
+}
 
 export const ChapterVideoForm = ({
   initialData,
-  courseId,
   chapterId,
+  courseId,
 }: ChapterVideoFormProps) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const initialVideoUrl = initialData?.videoUrl || "";
+  const [videoUrl, setVideoUrl] = useState(initialVideoUrl);
 
-  const toggleEdit = () => setIsEditing((current) => !current);
-
-  const router = useRouter();
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
-      toast.success("Chapter updated");
-      toggleEdit();
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
+      const response = await fetch('/api/updateChapterVideoUrl', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ chapterId, videoUrl }),
+      });
+
+      if (response.ok) {
+        toast.success("Video URL updated successfully");
+      } else {
+        throw new Error("Failed to update video URL");
+      }
+    } catch (error) {
+      console.error("Error updating video URL:", error);
+      toast.error("Failed to update video URL");
     }
-  }
+  };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
-        Chapter video
-        <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && (
-            <>Cancel</>
-          )}
-          {!isEditing && !initialData.videoUrl && (
-            <>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add a video
-            </>
-          )}
-          {!isEditing && initialData.videoUrl && (
-            <>
-              <Pencil className="h-4 w-4 mr-2" />
-              Edit video
-            </>
-          )}
-        </Button>
+    <form onSubmit={handleSubmit} className="w-full flex justify-center items-center py-10">
+      <div className="w-1/2 text-xl font-bold">YouTube Video URL
+        <TextInput
+          label="Enter YouTube embed link => https://www.youtube.com/embed/"
+          value={videoUrl}
+          onChange={(e) => setVideoUrl(e.target.value)}
+          placeholder="Enter YouTube video URL"
+          required
+        />
+        <Button type="submit">Save</Button>
       </div>
-      {!isEditing && (
-        !initialData.videoUrl ? (
-          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <Video className="h-10 w-10 text-slate-500" />
-          </div>
-        ) : (
-          <div className="relative aspect-video mt-2">
-            <MuxPlayer
-              playbackId={initialData?.muxData?.playbackId || ""}
-            />
-          </div>
-        )
-      )}
-      {isEditing && (
-        <div>
-          <FileUpload
-            endpoint="chapterVideo"
-            onChange={(url) => {
-              if (url) {
-                onSubmit({ videoUrl: url });
-              }
-            }}
-          />
-          <div className="text-xs text-muted-foreground mt-4">
-           Upload this chapter&apos;s video
-          </div>
-        </div>
-      )}
-      {initialData.videoUrl && !isEditing && (
-        <div className="text-xs text-muted-foreground mt-2">
-          Videos can take a few minutes to process. Refresh the page if video does not appear.
-        </div>
-      )}
-    </div>
-  )
-}
+    </form>
+  );
+};

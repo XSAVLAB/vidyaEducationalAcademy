@@ -1,55 +1,77 @@
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+"use client";
+import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
-
+import { useState, useEffect } from "react";
 import { db } from "@/lib/db";
 import { IconBadge } from "@/components/icon-badge";
 import { Banner } from "@/components/banner";
-
 import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
-import { ChapterVideoForm } from "./_components/chapter-video-form";
 import { ChapterActions } from "./_components/chapter-actions";
+import { ChapterVideoForm } from "./_components/chapter-video-form";
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const ChapterIdPage = async ({
-  params
-}: {
-  params: { courseId: string; chapterId: string }
-}) => {
-  const { userId } = auth();
+export async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const chapterId = req.query.chapterId as string;
 
-  if (!userId) {
-    return redirect("/");
+  try {
+    const fetchedChapter = await db.chapter.findUnique({
+      where: { id: chapterId },
+    });
+    if (fetchedChapter) {
+      res.status(200).json(fetchedChapter);
+    } else {
+      res.status(404).json({ error: 'Chapter not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching chapter:', error);
+    res.status(500).json({ error: 'Error fetching chapter' });
   }
+}
 
-  const chapter = await db.chapter.findUnique({
-    where: {
-      id: params.chapterId,
-      courseId: params.courseId
-    },
-    include: {
-      muxData: true,
-    },
+const ChapterIdPage = ({ params }: { params: { courseId: string; chapterId: string } }) => {
+  const router = useRouter();
+  const [chapter, setChapter] = useState({
+    id: '',
+    title: '',
+    description: '',
+    position: 0,
+    isPublished: false,
+    isFree: false,
+    videoUrl: '', // Ensure it's always a string
+    courseId: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
-  if (!chapter) {
-    return redirect("/")
-  }
+  useEffect(() => {
+    const fetchChapter = async () => {
+      try {
+        const response = await fetch(`/api/chapters/${params.chapterId}`);
+        if (response.ok) {
+          const fetchedChapter = await response.json();
+          setChapter(fetchedChapter);
+        } else {
+          throw new Error('Chapter not found');
+        }
+      } catch (error) {
+        console.error('Error fetching chapter:', error);
+      }
+    };
+    fetchChapter();
+  }, [params.chapterId, router]);
 
-  const requiredFields = [
-    chapter.title,
-    chapter.description,
-    chapter.videoUrl,
-  ];
-
-  const totalFields = requiredFields.length;
+  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
   const completedFields = requiredFields.filter(Boolean).length;
-
+  const totalFields = requiredFields.length;
   const completionText = `(${completedFields}/${totalFields})`;
-
   const isComplete = requiredFields.every(Boolean);
+
+  const handleBackToCourseSetup = () => {
+    router.push(`/teacher/courses/${params.courseId}`);
+  };
 
   return (
     <>
@@ -97,12 +119,24 @@ const ChapterIdPage = async ({
                 </h2>
               </div>
               <ChapterTitleForm
-                initialData={chapter}
+                initialData={{ title: chapter.title }} // Pass title as an object
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
               <ChapterDescriptionForm
-                initialData={chapter}
+                initialData={{
+                  id: chapter.id,
+                  title: chapter.title,
+                  description: chapter.description || "", // Ensure description is not null
+                  position: chapter.position,
+                  isPublished: chapter.isPublished,
+                  isFree: chapter.isFree,
+                  videoUrl: chapter.videoUrl || "", // Ensure videoUrl is not null
+                  videoEmbedUrl: "", // Add an empty string for videoEmbedUrl
+                  courseId: chapter.courseId,
+                  createdAt: chapter.createdAt,
+                  updatedAt: chapter.updatedAt,
+                }}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
@@ -115,7 +149,19 @@ const ChapterIdPage = async ({
                 </h2>
               </div>
               <ChapterAccessForm
-                initialData={chapter}
+                initialData={{
+                  id: chapter.id,
+                  title: chapter.title,
+                  description: chapter.description || "", // Ensure description is not null
+                  position: chapter.position,
+                  isPublished: chapter.isPublished,
+                  isFree: chapter.isFree,
+                  videoUrl: chapter.videoUrl || "", // Ensure videoUrl is not null
+                  videoEmbedUrl: "", // Add an empty string for videoEmbedUrl
+                  courseId: chapter.courseId,
+                  createdAt: chapter.createdAt,
+                  updatedAt: chapter.updatedAt,
+                }}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
@@ -129,7 +175,7 @@ const ChapterIdPage = async ({
               </h2>
             </div>
             <ChapterVideoForm
-              initialData={chapter}
+              initialData={{ videoUrl: chapter.videoUrl || "" }} // Pass videoUrl as an object with default empty string
               chapterId={params.chapterId}
               courseId={params.courseId}
             />
@@ -137,7 +183,7 @@ const ChapterIdPage = async ({
         </div>
       </div>
     </>
-   );
-}
- 
+  );
+};
+
 export default ChapterIdPage;
