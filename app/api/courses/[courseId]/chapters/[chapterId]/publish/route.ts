@@ -1,25 +1,6 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { NextApiRequest, NextApiResponse } from 'next';
-
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { chapterId, videoUrl } = req.body;
-    try {
-      await db.chapter.update({
-        where: { id: chapterId },
-        data: { videoUrl },
-      });
-      res.status(200).json({ message: 'Video URL updated successfully' });
-    } catch (error) {
-      console.error('Error updating video URL:', error);
-      res.status(500).json({ error: 'Failed to update video URL' });
-    }
-  } else {
-    res.status(405).json({ error: 'Method Not Allowed' });
-  }
-}
 
 export async function PATCH(
   req: Request,
@@ -50,17 +31,18 @@ export async function PATCH(
       }
     });
 
-    if (!chapter || !chapter.title || !chapter.description) {
+    if (!chapter || !chapter.title || !chapter.description || !chapter.videoUrl) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
+    const { videoUrl, isPublished } = await req.json();
 
-    const { videoUrl } = await req.json();
+    // const isYoutubeUrl = typeof videoUrl === "string" && videoUrl.includes("https://www.youtube.com/embed/");
 
-    if (!videoUrl.includes("https://www.youtube.com/embed/")) {
-      return new NextResponse("Please provide a valid YouTube embed URL", { status: 400 });
-    }
+    // if (!isYoutubeUrl) {
+    //   return new NextResponse("Please provide a valid YouTube embed URL", { status: 400 });
+    // } This is causing error.
 
-    // Update the chapter's videoUrl in the database
+    // Update the chapter's videoUrl and isPublished status in the database
     const updatedChapter = await db.chapter.update({
       where: {
         id: params.chapterId,
@@ -68,8 +50,10 @@ export async function PATCH(
       },
       data: {
         videoUrl: videoUrl,
+        isPublished: isPublished || false, // Use provided isPublished or default to false
       }
     });
+
 
     return NextResponse.json(updatedChapter);
   } catch (error) {

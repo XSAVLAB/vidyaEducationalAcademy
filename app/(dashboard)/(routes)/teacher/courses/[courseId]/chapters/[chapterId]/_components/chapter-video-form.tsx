@@ -92,6 +92,9 @@ export const ChapterVideoForm = ({
           >
             Update Video URL
           </button>
+          <div className="text-xs text-muted-foreground mt-2">
+            This is a default youtube url just take the hash from your youtube url which is <strong>https://www.youtube.com/watch?v=<span className=" text-green-500">hashIshere</span></strong> <br /> and paste it here in the default url <strong>https://www.youtube.com/embed/<span className=" text-green-500">theHashFromYoutbeVideoUrl</span></strong>
+          </div>
         </div>
       )}
       {initialData.videoUrl && !isEditing && (

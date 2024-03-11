@@ -78,7 +78,7 @@ const CourseIdPage = async ({
         />
       )}
       <div className="p-6">
-        <div className="flex items-center justify-between">
+        <div className=" flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div className="flex flex-col gap-y-2">
             <h1 className="text-2xl font-medium">
               Course setup
@@ -87,14 +87,17 @@ const CourseIdPage = async ({
               Complete all fields {completionText}
             </span>
           </div>
-          <Actions
-            disabled={!isComplete}
-            courseId={params.courseId}
-            isPublished={course.isPublished}
-          />
+          <div className="flex items-center justify-center">
+            <Actions
+              disabled={!isComplete}
+              courseId={params.courseId}
+              isPublished={course.isPublished}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
+
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboard} />
               <h2 className="text-xl">

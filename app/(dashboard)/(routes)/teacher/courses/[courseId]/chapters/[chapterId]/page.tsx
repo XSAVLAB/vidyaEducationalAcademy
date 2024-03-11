@@ -1,7 +1,5 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { db } from "@/lib/db";
 import { Banner } from "@/components/banner";
 import { ChapterTitleForm } from "./_components/chapter-title-form";
@@ -40,9 +38,7 @@ const ChapterIdPage = async ({
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
-
   const completionText = `(${completedFields}/${totalFields})`;
-
   const isComplete = requiredFields.every(Boolean);
   return (
     <>
@@ -58,15 +54,6 @@ const ChapterIdPage = async ({
         {/* Back button and title */}
         <div className="flex items-center justify-between">
           <div className="w-full">
-            <span className="flex w-[9.5rem] px-2 items-center text-sm transition mb-6 rounded-lg outline outline-emerald-600 hover:bg-emerald-400 font-semibold outline-2">
-              <Link
-                href={`/teacher/courses/${params.courseId}`}
-                className="flex items-center"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Course
-              </Link>
-            </span>
             <div className="flex flex-col sm:flex-row items-center justify-between w-full">
               <div className="flex flex-col gap-y-2 mb-8 sm:mb-0">
                 <h1 className="text-2xl font-medium">
