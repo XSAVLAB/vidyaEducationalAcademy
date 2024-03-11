@@ -29,7 +29,8 @@ export async function PATCH(
 
     const hasPublishedChapter = course.chapters.some((chapter) => chapter.isPublished);
 
-    if (!course.title || !course.description || !course.imageUrl || !course.categoryId || !hasPublishedChapter) {
+    if (!course.title || !course.description || !course.imageUrl || !course.categoryId) {
+      alert("Missing Fileds");
       return new NextResponse("Missing required fields", { status: 401 });
     }
 
@@ -42,7 +43,7 @@ export async function PATCH(
       if (embedUrl) {
         await db.chapter.update({
           where: { id: chapter.id },
-          data: { videoEmbedUrl: embedUrl },
+          data: { videoUrl: embedUrl }, // Update to use videoUrl
         });
       }
     }

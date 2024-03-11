@@ -1,58 +1,104 @@
+"use client";
+import * as z from "zod";
+import axios from "axios";
+import { Pencil, PlusCircle, Video } from "lucide-react";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
-import { TextInput } from "@/components/ui/text-input";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { Chapter } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 
 interface ChapterVideoFormProps {
-  initialData: {
-    videoUrl: string;
-  };
-  chapterId: string;
+  initialData: Chapter;
   courseId: string;
+  chapterId: string;
 }
+
+const formSchema = z.object({
+  videoUrl: z.string().min(1),
+});
 
 export const ChapterVideoForm = ({
   initialData,
-  chapterId,
   courseId,
+  chapterId,
 }: ChapterVideoFormProps) => {
-  const initialVideoUrl = initialData?.videoUrl || "";
-  const [videoUrl, setVideoUrl] = useState(initialVideoUrl);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newVideoUrl, setNewVideoUrl] = useState(initialData.videoUrl || "");
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const toggleEdit = () => setIsEditing((current) => !current);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch('/api/updateChapterVideoUrl', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ chapterId, videoUrl }),
-      });
-
-      if (response.ok) {
-        toast.success("Video URL updated successfully");
-      } else {
-        throw new Error("Failed to update video URL");
-      }
-    } catch (error) {
-      console.error("Error updating video URL:", error);
-      toast.error("Failed to update video URL");
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
+      toast.success("Chapter updated");
+      toggleEdit();
+      router.refresh();
+    } catch {
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex justify-center items-center py-10">
-      <div className="w-1/2 text-xl font-bold">YouTube Video URL
-        <TextInput
-          label="Enter YouTube embed link => https://www.youtube.com/embed/"
-          value={videoUrl}
-          onChange={(e) => setVideoUrl(e.target.value)}
-          placeholder="Enter YouTube video URL"
-          required
-        />
-        <Button type="submit">Save</Button>
+    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+      <div className="font-medium flex items-center justify-between">
+        Chapter video
+        <Button onClick={toggleEdit} variant="ghost">
+          {isEditing && (
+            <>Cancel</>
+          )}
+          {!isEditing && !initialData.videoUrl && (
+            <>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add a video
+            </>
+          )}
+          {!isEditing && initialData.videoUrl && (
+            <>
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit video
+            </>
+          )}
+        </Button>
       </div>
-    </form>
+      {!isEditing && (
+        <div className="relative flex items-center justify-center aspect-w-16 aspect-h-9 mt-2">
+          {!initialData.videoUrl ? (
+            <div className="flex items-center justify-center h-full bg-slate-200 rounded-md">
+              <Video className="h-10 w-10 text-slate-500" />
+            </div>
+          ) : (
+            <iframe
+              src={initialData.videoUrl}
+              title="Chapter Video"
+              className="w-full h-full rounded-md"
+              style={{ height: '30rem' }}
+            ></iframe>
+          )}
+        </div>
+      )}
+      {isEditing && (
+        <div>
+          <input
+            type="text"
+            value={newVideoUrl}
+            onChange={(e) => setNewVideoUrl(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 w-full mt-4"
+          />
+          <button
+            onClick={() => onSubmit({ videoUrl: newVideoUrl })}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
+          >
+            Update Video URL
+          </button>
+        </div>
+      )}
+      {initialData.videoUrl && !isEditing && (
+        <div className="text-xs text-muted-foreground mt-2">
+          This is a sample video please edit the url.
+        </div>
+      )}
+    </div>
   );
 };

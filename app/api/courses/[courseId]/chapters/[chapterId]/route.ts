@@ -43,7 +43,7 @@ export async function DELETE(
       },
     });
 
-    const deletedChapter = await db.chapter.delete({
+    await db.chapter.delete({
       where: {
         id: params.chapterId
       }
@@ -67,9 +67,9 @@ export async function DELETE(
       });
     }
 
-    return NextResponse.json(deletedChapter);
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.log("[CHAPTER_ID_DELETE]", error);
+    console.error("[CHAPTER_ID_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -80,7 +80,7 @@ export async function PATCH(
 ) {
   try {
     const { userId } = auth();
-    const { isPublished, videoUrl, ...values } = await req.json();
+    const { videoUrl, ...values } = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -104,26 +104,18 @@ export async function PATCH(
       },
       data: {
         ...values,
+        videoUrl, // Update the videoUrl directly
       }
     });
 
-    if (videoUrl) {
-      const embedUrl = getYouTubeEmbedUrl(videoUrl);
-      if (embedUrl) {
-        await db.chapter.update({
-          where: { id: params.chapterId },
-          data: { videoEmbedUrl: embedUrl },
-        });
-      }
-    }
-
     return NextResponse.json(chapter);
   } catch (error) {
-    console.log("[COURSES_CHAPTER_ID]", error);
+    console.error("[COURSES_CHAPTER_ID]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
+// Function to get YouTube embed URL from the video URL
 function getYouTubeEmbedUrl(videoUrl: string): string | null {
   const videoId = videoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if (videoId) {

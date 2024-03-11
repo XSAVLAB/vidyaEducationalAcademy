@@ -1,184 +1,139 @@
-"use client";
-import { redirect, useRouter } from "next/navigation";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
 import { db } from "@/lib/db";
-import { IconBadge } from "@/components/icon-badge";
 import { Banner } from "@/components/banner";
 import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
-import { ChapterActions } from "./_components/chapter-actions";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
-import { NextApiRequest, NextApiResponse } from 'next';
+import { ChapterActions } from "./_components/chapter-actions";
 
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const chapterId = req.query.chapterId as string;
+const ChapterIdPage = async ({
+  params
+}: {
+  params: { courseId: string; chapterId: string }
+}) => {
+  const { userId } = auth();
 
-  try {
-    const fetchedChapter = await db.chapter.findUnique({
-      where: { id: chapterId },
-    });
-    if (fetchedChapter) {
-      res.status(200).json(fetchedChapter);
-    } else {
-      res.status(404).json({ error: 'Chapter not found' });
-    }
-  } catch (error) {
-    console.error('Error fetching chapter:', error);
-    res.status(500).json({ error: 'Error fetching chapter' });
+  if (!userId) {
+    return redirect("/");
   }
-}
 
-const ChapterIdPage = ({ params }: { params: { courseId: string; chapterId: string } }) => {
-  const router = useRouter();
-  const [chapter, setChapter] = useState({
-    id: '',
-    title: '',
-    description: '',
-    position: 0,
-    isPublished: false,
-    isFree: false,
-    videoUrl: '', // Ensure it's always a string
-    courseId: '',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: params.chapterId,
+      courseId: params.courseId
+    },
   });
 
-  useEffect(() => {
-    const fetchChapter = async () => {
-      try {
-        const response = await fetch(`/api/chapters/${params.chapterId}`);
-        if (response.ok) {
-          const fetchedChapter = await response.json();
-          setChapter(fetchedChapter);
-        } else {
-          throw new Error('Chapter not found');
-        }
-      } catch (error) {
-        console.error('Error fetching chapter:', error);
-      }
-    };
-    fetchChapter();
-  }, [params.chapterId, router]);
+  if (!chapter) {
+    return redirect("/")
+  }
 
-  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
-  const completedFields = requiredFields.filter(Boolean).length;
+  const requiredFields = [
+    chapter.title,
+    chapter.description,
+    chapter.videoUrl,
+  ];
+
   const totalFields = requiredFields.length;
+  const completedFields = requiredFields.filter(Boolean).length;
+
   const completionText = `(${completedFields}/${totalFields})`;
+
   const isComplete = requiredFields.every(Boolean);
-
-  const handleBackToCourseSetup = () => {
-    router.push(`/teacher/courses/${params.courseId}`);
-  };
-
   return (
     <>
+      {/* Banner for unpublished chapters */}
       {!chapter.isPublished && (
         <Banner
           variant="warning"
           label="This chapter is unpublished. It will not be visible in the course"
         />
       )}
-      <div className="p-6">
+      {/* Main content */}
+      <div className="px-8 py-4">
+        {/* Back button and title */}
         <div className="flex items-center justify-between">
           <div className="w-full">
-            <Link
-              href={`/teacher/courses/${params.courseId}`}
-              className="flex items-center text-sm hover:opacity-75 transition mb-6"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to course setup
-            </Link>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex flex-col gap-y-2">
+            <span className="flex w-[9.5rem] px-2 items-center text-sm transition mb-6 rounded-lg outline outline-emerald-600 hover:bg-emerald-400 font-semibold outline-2">
+              <Link
+                href={`/teacher/courses/${params.courseId}`}
+                className="flex items-center"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Course
+              </Link>
+            </span>
+            <div className="flex flex-col sm:flex-row items-center justify-between w-full">
+              <div className="flex flex-col gap-y-2 mb-8 sm:mb-0">
                 <h1 className="text-2xl font-medium">
                   Chapter Creation
                 </h1>
-                <span className="text-sm text-slate-700">
-                  Complete all fields {completionText}
+                <span className="text-sm text-green-400">
+                  Fill all fields to publish
                 </span>
               </div>
-              <ChapterActions
-                disabled={!isComplete}
-                courseId={params.courseId}
-                chapterId={params.chapterId}
-                isPublished={chapter.isPublished}
-              />
+              <div>
+                <ChapterActions
+                  disabled={false}
+                  courseId={params.courseId}
+                  chapterId={params.chapterId}
+                  isPublished={chapter.isPublished}
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        {/* Chapter forms */}
+        <div className="grid grid-cols-1 mb-40 gap-6 mt-16">
+          {/* Title and description forms */}
           <div className="space-y-4">
             <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={LayoutDashboard} />
                 <h2 className="text-xl">
                   Customize your chapter
                 </h2>
               </div>
               <ChapterTitleForm
-                initialData={{ title: chapter.title }} // Pass title as an object
+                initialData={{ title: chapter.title }}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
               <ChapterDescriptionForm
-                initialData={{
-                  id: chapter.id,
-                  title: chapter.title,
-                  description: chapter.description || "", // Ensure description is not null
-                  position: chapter.position,
-                  isPublished: chapter.isPublished,
-                  isFree: chapter.isFree,
-                  videoUrl: chapter.videoUrl || "", // Ensure videoUrl is not null
-                  videoEmbedUrl: "", // Add an empty string for videoEmbedUrl
-                  courseId: chapter.courseId,
-                  createdAt: chapter.createdAt,
-                  updatedAt: chapter.updatedAt,
-                }}
+                initialData={chapter}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
             </div>
+            {/* Access settings form */}
             <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={Eye} />
                 <h2 className="text-xl">
                   Access Settings
                 </h2>
               </div>
               <ChapterAccessForm
-                initialData={{
-                  id: chapter.id,
-                  title: chapter.title,
-                  description: chapter.description || "", // Ensure description is not null
-                  position: chapter.position,
-                  isPublished: chapter.isPublished,
-                  isFree: chapter.isFree,
-                  videoUrl: chapter.videoUrl || "", // Ensure videoUrl is not null
-                  videoEmbedUrl: "", // Add an empty string for videoEmbedUrl
-                  courseId: chapter.courseId,
-                  createdAt: chapter.createdAt,
-                  updatedAt: chapter.updatedAt,
-                }}
+                initialData={chapter}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
             </div>
-          </div>
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={Video} />
-              <h2 className="text-xl">
-                Add a video
-              </h2>
+            <div>
+              {/* Video form */}
+              <div className="flex items-center gap-x-2">
+                <h2 className="text-xl">
+                  Add a video
+                </h2>
+              </div>
+              <ChapterVideoForm
+                initialData={chapter}
+                chapterId={params.chapterId}
+                courseId={params.courseId}
+              />
             </div>
-            <ChapterVideoForm
-              initialData={{ videoUrl: chapter.videoUrl || "" }} // Pass videoUrl as an object with default empty string
-              chapterId={params.chapterId}
-              courseId={params.courseId}
-            />
           </div>
         </div>
       </div>

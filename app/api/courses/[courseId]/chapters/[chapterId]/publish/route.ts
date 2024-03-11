@@ -55,35 +55,25 @@ export async function PATCH(
     }
 
     const { videoUrl } = await req.json();
-    const videoId = extractYouTubeVideoId(videoUrl);
 
-    if (!videoId) {
-      // If the URL is not a valid YouTube URL, throw an error
-      return new NextResponse("Please provide a valid YouTube URL", { status: 400 });
+    if (!videoUrl.includes("https://www.youtube.com/embed/")) {
+      return new NextResponse("Please provide a valid YouTube embed URL", { status: 400 });
     }
 
-    // Store the complete YouTube URL in the database
-    const patchedChapter = await db.chapter.update({
+    // Update the chapter's videoUrl in the database
+    const updatedChapter = await db.chapter.update({
       where: {
         id: params.chapterId,
         courseId: params.courseId,
       },
       data: {
         videoUrl: videoUrl,
-        videoEmbedUrl: `https://www.youtube.com/embed/${videoId}`,
       }
     });
 
-    return NextResponse.json(patchedChapter);
+    return NextResponse.json(updatedChapter);
   } catch (error) {
     console.log("[CHAPTER_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
-}
-
-// Function to extract video ID from a YouTube URL
-function extractYouTubeVideoId(url: string): string | null {
-  const videoIdRegex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-  const match = url.match(videoIdRegex);
-  return match ? match[1] : null;
 }

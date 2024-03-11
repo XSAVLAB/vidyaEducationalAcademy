@@ -1,11 +1,9 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
-
 import { db } from "@/lib/db";
 import { IconBadge } from "@/components/icon-badge";
 import { Banner } from "@/components/banner";
-
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
@@ -44,6 +42,7 @@ const CourseIdPage = async ({
       },
     },
   });
+
 
   const categories = await db.category.findMany({
     orderBy: {
@@ -164,7 +163,7 @@ const CourseIdPage = async ({
         </div>
       </div>
     </>
-   );
+  );
 }
- 
+
 export default CourseIdPage;

@@ -1,11 +1,13 @@
 "use client";
 import { auth } from "@clerk/nextjs";
+import NextAuth, { AuthOptions } from "next-auth";
 import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
+import { GetServerSideProps } from 'next';
 
 const Spinner = ({ size = 40, color = '#1E3A8A' }) => {
   return (
@@ -20,42 +22,28 @@ const Spinner = ({ size = 40, color = '#1E3A8A' }) => {
   );
 };
 
-export async function getServerSideProps(context: any) {
-  const { userId } = auth();
-  if (!userId) {
-    return {
-      redirect: {  // Ensure redirect object is structured correctly
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      userId,
-    },
-  };
+interface ChapterIdPageProps {
+  params: { courseId: string; chapterId: string };
+  userId: string;
 }
 
-const ChapterIdPage = ({
-  params,
-  userId // Pass userId as props
-}: {
-  params: { courseId: string; chapterId: string }
-  userId: string; // Add userId prop
-}) => {
+const ChapterIdPage: React.FC<ChapterIdPageProps> = ({ params, userId }) => {
   const [chapterData, setChapterData] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getChapter({
-        userId,
-        chapterId: params.chapterId,
-        courseId: params.courseId,
-      });
+      try {
+        const data = await getChapter({
+          userId,
+          chapterId: params.chapterId,
+          courseId: params.courseId,
+        });
 
-      setChapterData(data);
+        setChapterData(data);
+      } catch (error) {
+        // Handle any errors (e.g., show an error message)
+        console.error("Error fetching chapter data:", error);
+      }
     };
 
     fetchData();
@@ -69,14 +57,7 @@ const ChapterIdPage = ({
     );
   }
 
-  const {
-    chapter,
-    course,
-    attachments,
-    nextChapter,
-    userProgress,
-    purchase,
-  } = chapterData;
+  const { chapter, course, attachments, userProgress, purchase } = chapterData;
 
   if (!chapter || !course) {
     redirect("/");
@@ -120,6 +101,7 @@ const ChapterIdPage = ({
                   <a
                     href={attachment.url}
                     target="_blank"
+                    rel="noopener noreferrer"
                     key={attachment.id}
                     className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
                   >
@@ -137,5 +119,24 @@ const ChapterIdPage = ({
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<ChapterIdPageProps> = async (context) => {
+  const { userId } = auth();
+  if (!userId) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      userId,
+      params: context.params as { courseId: string; chapterId: string },
+    },
+  };
+};
+
 
 export default ChapterIdPage;

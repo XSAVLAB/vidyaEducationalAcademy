@@ -1,4 +1,5 @@
 "use client";
+
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useState } from "react";
@@ -35,10 +36,10 @@ export const ChapterActions = ({
         await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/publish`);
         toast.success("Chapter published");
       }
+
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
-      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +48,9 @@ export const ChapterActions = ({
   const onDelete = async () => {
     try {
       setIsLoading(true);
+
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
+
       toast.success("Chapter deleted");
       router.refresh();
       router.push(`/teacher/courses/${courseId}`);

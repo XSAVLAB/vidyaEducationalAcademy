@@ -1,6 +1,6 @@
 const nextConfig = {
   images: {
-    domains: ["utfs.io", "drive.google.com", "picsum.photos"],
+    domains: ["utfs.io", "drive.google.com"],
   },
 };
 

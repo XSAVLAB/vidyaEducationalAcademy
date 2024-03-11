@@ -19,7 +19,7 @@ export const getChapter = async ({
           userId,
           courseId,
         }
-      } 
+      }
     });
 
     const course = await db.course.findUnique({
@@ -57,15 +57,10 @@ export const getChapter = async ({
     let videoUrl: string | null = null;
 
     if (chapter.isFree || purchase) {
-      // Here, you would fetch video data from the YouTube API based on the YouTube video ID stored in your database
-      // For demonstration purposes, let's assume that the YouTube video ID is stored in the videoUrl field of the Chapter model
-      const youtubeVideoId = chapter.videoUrl;
-      
-      // Construct the YouTube video URL
-      if (youtubeVideoId) {
-        videoUrl = `https://www.youtube.com/watch?v=${youtubeVideoId}`;
-      }
-
+      // Check if the videoUrl contains the YouTube embed string
+      // if (chapter.videoUrl.includes("https://www.youtube.com/embed/")) {
+      //   videoUrl = chapter.videoUrl.replace("/embed/", "/watch?v=");
+      // }
       // Fetch next chapter
       nextChapter = await db.chapter.findFirst({
         where: {

@@ -1,5 +1,4 @@
 "use client";
-
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useState } from "react";
@@ -66,7 +65,6 @@ export const Actions = ({
     <div className="flex items-center gap-x-2">
       <Button
         onClick={onClick}
-        disabled={disabled || isLoading}
         variant="outline"
         size="sm"
       >
