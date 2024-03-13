@@ -63,6 +63,10 @@ const CourseIdPage = async ({
     course.chapters.some(chapter => chapter.isPublished),
   ];
 
+  const reload = () => {
+    window.location.reload();
+  };
+
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
 

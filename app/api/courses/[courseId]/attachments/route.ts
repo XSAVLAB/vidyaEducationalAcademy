@@ -9,7 +9,7 @@ export async function POST(
 ) {
   try {
     const { userId } = auth();
-    const { url, chapterId } = await req.json(); // Assuming chapterId is provided in the request body
+    const { url } = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -31,7 +31,6 @@ export async function POST(
         url,
         name: url.split("/").pop(),
         courseId: params.courseId,
-        chapterId: chapterId,
       }
     });
 

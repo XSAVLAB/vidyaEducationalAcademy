@@ -91,8 +91,10 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
           >
             Upload
           </button>
+          <div className="text-xs text-red-500 mt-2">
+            Use the link below and edit the hash copied from your <span className="text-green-700">viewable google drive image</span>
+          </div>
           <div className="text-xs text-muted-foreground mt-2">
-            16:9 aspect ratio recommended
             https://drive.google.com/uc?id=|yourGoogleDriveImageHash|
           </div>
         </div>
