@@ -63,8 +63,10 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
         <div className="relative aspect-video mt-2">
           {imageUrl ? (
             <Image
-              alt="Upload"
-              fill
+              alt="Image Not Found Server Error"
+              width={500}
+              height={500}
+              style={{ width: "100%", height: "auto", objectFit: "cover" }}
               className="object-cover rounded-md"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               src={imageUrl}

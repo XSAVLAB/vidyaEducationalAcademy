@@ -121,7 +121,7 @@ const ChapterIdPage: React.FC<ChapterIdPageProps> = ({ params, userId }) => {
 }
 
 export const getServerSideProps: GetServerSideProps<ChapterIdPageProps> = async (context) => {
-  const { userId } = auth();
+  const userId = context.req.cookies['your_cookie_name_for_authentication'];
   if (!userId) {
     return {
       redirect: {

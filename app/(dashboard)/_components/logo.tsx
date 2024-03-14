@@ -5,8 +5,9 @@ export const Logo = () => {
     <Image
       height={200}
       width={200}
+      style={{ width: "100%", height: "auto", objectFit: "cover" }}
       priority
-      alt="logo"
+      alt="logo not available server error"
       src="/logo.webp"
     />
   )

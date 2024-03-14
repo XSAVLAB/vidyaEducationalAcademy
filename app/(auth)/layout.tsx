@@ -1,5 +1,6 @@
 import Slider from "@/components/slider";
 import Footer from "@/components/footer";
+import { Navbar } from "@/components/navbar";
 const AuthLayout = ({
   children
 }: {
@@ -28,11 +29,12 @@ const AuthLayout = ({
   ];
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
-      <div className="h-full w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:ml-20 items-center justify-center">
+      <div className="flex items-center bg-sky-950 justify-center h-full w-full"><Navbar /></div>
+      <div className="h-full w-full grid bg-sky-700 grid-cols-1 lg:grid-cols-2 gap-8 lg:pl-20 items-center justify-center pb-10">
         <div className="flex items-center justify-center h-full w-auto"><Slider sliderImages={images} /></div>
-        <div className="flex items-center justify-center h-full w-auto">{children}</div>
+        <div className="flex p-12 items-center justify-center h-full w-auto">{children}</div>
       </div>
-      <div className="flex items-center justify-center h-full w-full mt-8"><Footer /></div>
+      <div className="flex items-center bg-sky-950 justify-center h-full w-full"><Footer /></div>
     </div>
   );
 }

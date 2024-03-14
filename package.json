@@ -2,6 +2,7 @@
   "name": "lms-tutorial",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -52,7 +53,7 @@
     "react-icons": "^4.11.0",
     "react-quill": "^2.0.0",
     "recharts": "^2.8.0",
-    "stripe": "^13.6.0",
+    "stripe": "^14.20.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",

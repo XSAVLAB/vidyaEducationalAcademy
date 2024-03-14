@@ -19,7 +19,7 @@ const Footer = () => {
         address: "",
     })
     return (
-        <footer className=" bg-sky-700 text-2xs 2xs:text-xs md:text-sm text-white flex flex-col overflow-y-auto h-auto w-full">
+        <footer className=" text-2xs 2xs:text-xs md:text-sm text-white flex flex-col overflow-y-auto h-auto w-full">
             {/* 1st Section */}
             <div className="flex flex-col w-full h-auto md:flex-row mx-auto justify-around items-center mb-4 md:mb-0">
                 <div className="flex justify-center items-center">
