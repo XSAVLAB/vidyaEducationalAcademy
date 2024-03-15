@@ -21,7 +21,7 @@ const Footer = () => {
     return (
         <footer className=" text-2xs 2xs:text-xs md:text-sm text-white flex flex-col overflow-y-auto h-auto w-full">
             {/* 1st Section */}
-            <div className="flex flex-col w-full h-auto md:flex-row mx-auto justify-around items-center mb-4 md:mb-0">
+            <div className="w-full h-auto grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center items-center mb-4 md:mb-0">
                 <div className="flex justify-center items-center">
                     <div className="font-bold text-xl">
                         <Image src={logo} alt="Logo" className="object-contain w-[8rem] sm:w-[10rem] md:w-[12rem] lg:w-[10rem] h-auto hover:scale-125 rounded-lg" />
@@ -31,7 +31,7 @@ const Footer = () => {
                         <div className="text-2xs">{descriptionText}</div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4 my-auto md:ml-4 lg:ml-12 items-center justify-center">
+                <div className="flex flex-col gap-4 my-auto items-center justify-center">
                     <a href={footerData.phone} target="_blank" rel="noopener noreferrer" className="flex">
                         <FaPhone className="mr-2" />
                         <p>07385243661</p>
@@ -45,7 +45,7 @@ const Footer = () => {
                         <p>Nashik, Maharashtra</p>
                     </a>
                 </div>
-                <div className='w-auto flex mx-auto h-auto py-4 '>
+                <div className='w-auto flex mx-auto h-auto py-8 '>
                     <div className='w-auto h-auto mx-auto shadow-md shadow-white rounded-lg hover:scale-125'>
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3901.6090769270354!2d73.77292503486582!3d20.001611379431598!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdd95f2b788f165%3A0x6c9108cc4d971322!2sVidya%20Educational%20Academy%20-%20NEET%7C%20JEE%7C%20NDA%7C%20Foundation%20Course%7C%20Hostel%20Facility%7C%20CBSE%7C%20SSC%20%7C%20Best%20coaching%20classes%20in%20Nashik!5e0!3m2!1sen!2sin!4v1706968837263!5m2!1sen!2sin"

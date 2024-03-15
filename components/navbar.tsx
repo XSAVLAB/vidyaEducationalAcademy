@@ -5,6 +5,13 @@ import logo from "../public/Logo.webp";
 
 export const Navbar = () => {
     const [descriptionText, setDescriptionText] = useState("Your description text goes here. This is a long text for demonstration purposes.");
+    const scrollDown = () => {
+        window.scrollBy({
+            // top: 100 * window.innerHeight,
+            top: window.innerHeight,
+            behavior: 'smooth'
+        });
+    };
     return (
         <div className=" w-full h-auto items-center sticky justify-between bg-sky-950 text-white">
             <div className="flex flex-col w-full sticky top-0 items-center font-bold shadow-md justify-between h-auto">
@@ -20,15 +27,16 @@ export const Navbar = () => {
                     </div>
                     <div className='flex flex-col justify-end w-auto items-end px-4 gap-2 text-2xs sm:text-xs lg:text-base'>
                         <div className='flex 3xs:hidden sm:flex flex-row w-full text-center align-items-end justify-end gap-4'>
-                            <a href="/sign-in">
-                                <div className='bg-blue-700 w-auto cursor-pointer text-white rounded-lg p-1 md:px-8 border-4 hover:bg-white border-blue-700 hover:text-blue-700 shadow-lg shadow-blue-700'>Login</div>
+                            <div onClick={scrollDown} className='bg-white w-auto cursor-pointer text-sky-950 rounded-lg p-1 md:px-8 border-4 border-white hover:text-green-700 shadow-lg shadow-white'>Login</div>
+                            {/* <a href="/sign-in">
+                                <div className='bg-white w-auto cursor-pointer text-sky-950 rounded-lg p-1 md:px-8 border-4 border-white hover:text-green-700 shadow-lg shadow-white'>Login</div>
                             </a>
                             <a href="/sign-up">
-                                <div className='bg-blue-700 w-auto cursor-pointer text-white rounded-lg p-1 md:px-8 border-4 hover:bg-white border-blue-700 hover:text-blue-700 shadow-lg shadow-blue-700'>Register</div>
-                            </a>
+                                <div className='bg-white w-auto cursor-pointer text-sky-950 rounded-lg p-1 md:px-8 border-4 border-white hover:text-green-700 shadow-lg shadow-white'>Register</div>
+                            </a> */}
                         </div>
-                        <div className=" overflow-hidden hover:scale-110 flex items-center w-[90vw] sm:w-[40vw] mt-4 shadow-lg shadow-blue-700 rounded-full">
-                            <div className='bg-blue-700 text-white w-fit md:px-4 p-2 rounded-l-full'>Announcements </div>
+                        <div className=" overflow-hidden hover:scale-110 flex items-center w-[90vw] sm:w-[40vw] mt-4 shadow-lg shadow-white rounded-full">
+                            <div className='bg-white text-sky-950 w-fit md:px-4 p-2 rounded-l-full'>Announcements </div>
                             <div className="whitespace-nowrap animate-marquee -z-10">{descriptionText}</div>
                         </div>
                     </div>

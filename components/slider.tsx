@@ -26,7 +26,7 @@ const Slider: React.FC<SliderProps> = ({ sliderImages }) => {
     }, [sliderImages.length]);
 
     return (
-        <div className=" relative z-0 py-8 w-full mx-auto h-[70vh] lg:h-[90vh] overflow-hidden pt-10 my-4">
+        <div className=" relative z-0 w-full mx-auto h-[70vh] py-4 overflow-hidden my-4">
             {sliderImages.map((image: string, index: number) => (
                 <div
                     key={index}
@@ -36,9 +36,10 @@ const Slider: React.FC<SliderProps> = ({ sliderImages }) => {
                     <Image
                         src={image}
                         alt={`Slider Image ${index + 1}`}
-                        layout="fill"
-                        objectFit="contain"
-                        className="object-contain"
+                        width={500}
+                        height={500}
+                        style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                        className="object-contain w-auto h-auto"
                     />
                 </div>
             ))}
