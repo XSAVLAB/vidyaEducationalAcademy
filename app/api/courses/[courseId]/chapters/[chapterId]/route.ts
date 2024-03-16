@@ -115,12 +115,31 @@ export async function PATCH(
   }
 }
 
-// Function to get YouTube embed URL from the video URL
-function getYouTubeEmbedUrl(videoUrl: string): string | null {
-  const videoId = videoUrl.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  if (videoId) {
-    return `https://www.youtube.com/embed/${videoId[1]}`;
-  } else {
-    return null; // Return null if video URL is not a valid YouTube URL
+export async function GET(req: Request, { params }: { params: { courseId: string; chapterId: string } }) {
+  try {
+    // Check user authentication (optional, adjust based on your needs)
+    const { userId } = auth();
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const chapter = await db.chapter.findUnique({
+      where: {
+        id: params.chapterId,
+        courseId: params.courseId,
+        isPublished: true, // Only fetch published chapters (optional)
+      },
+      include: {
+        Attachment: true,
+      },
+    });
+
+    if (!chapter) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
+    return NextResponse.json(chapter);
+  } catch (error) {
+    console.error("[CHAPTER_ID_GET]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

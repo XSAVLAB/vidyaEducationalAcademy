@@ -13,6 +13,8 @@ import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Actions } from "./_components/actions";
 
+import { Preview } from "@/components/preview";
+
 const CourseIdPage = async ({
   params
 }: {
