@@ -99,14 +99,24 @@ html, body{
 @keyframes marquee {
   0% {
     transform: translateX(100%);
+    color: #940c0c;
+  }
+  20% {
+    color: #a84e0e;
+  }
+  40% {
+    color: hsl(44, 73%, 43%);
+  }
+  60% {
+    color: #7fbe19;
+  }
+  80% {
+    color: #1c994a;
   }
   100% {
     transform: translateX(-100%);
+    color: #171e81;
   }
-}
-
-.animate-marquee {
-  animation: marquee 10s linear infinite;
 }
 
 .text-2xs {
@@ -117,3 +127,97 @@ html, body{
   font-size: 0.5rem;
   line-height: 0.75rem;
 }
+.text-4xs {
+  font-size: 0.4rem;
+  line-height: 0.65rem;
+}
+
+.animate-marquee {
+  animation: marquee  10s linear infinite;
+}
+
+@keyframes changeBgColor {
+  0% {
+    background-color: #b585ec;
+  }
+  15% {
+    background-color: #4355f1;
+  }
+  30% {
+    background-color: #509adf;
+  }
+  45% {
+    background-colorr: #6ee087;
+  }
+  60% {
+    background-color: #eef77a;
+  }
+  80%{
+    background-color: #e49058;
+  }
+  100% {
+    background-color: #e94c4c;
+  }
+}
+
+@keyframes changeTextColor {
+  0% {
+    color: #290750;
+  }
+  15% {
+    color: #071380;
+  }
+  30% {
+  color: #0b6cc7;
+  }
+  45% {
+    color: #088624;
+  }
+  60% {
+    color: #c5d114;
+  }
+  80%{
+    color: #a84e12;
+  }
+  100% {
+    color: #be0c0c;
+  }
+}
+
+.animate-color-change {
+  animation: changeBgColor 10s linear infinite;
+}
+.animate-text-change {
+  animation: changeTextColor 5s linear infinite;
+}
+
+@keyframes changeShadowColor {
+  0% {
+    --tw-shadow-color: #9a4cf3;
+  }
+  15% {
+    --tw-shadow-color: #2635b9;
+  }
+  30% {
+    --tw-shadow-color: #1884e9;
+  }
+  45% {
+    --tw-shadow-color: #20e74b;
+  }
+  60% {
+    --tw-shadow-color: #eaf554;
+  }
+  80%{
+    --tw-shadow-color: #eb701e;
+  }
+  100% {
+    --tw-shadow-color: #eb1a1a;
+  }
+}
+
+.animate-shadow-box-change {
+  animation: changeShadowColor 10s linear infinite;
+}
+
+
+

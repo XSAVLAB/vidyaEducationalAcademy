@@ -99,7 +99,8 @@ const Footer = () => {
             <div className="grid sm:grid-cols-2 items-center text-center gap-1 sm:gap-8 px-16 py-2 pt-4 sm:py-4 border-t-2">
                 <div className="flex items-center text-center justify-center flex-col ">
                     <p className="font-bold mb-2">Head Office Address:</p>
-                    <p>Corporate Office, Address Line 1, Address Line 2, City, Pin Code</p>
+                    <p>Rachana Vidhyalay Lane, Canada Corner, Plot No.5 Alankar, Sharanpur Rd, Nashik, Maharashtra 422005
+                    </p>
                 </div>
                 <div className="flex flex-col my-4 mx-auto">
                     <div className="flex items-center">

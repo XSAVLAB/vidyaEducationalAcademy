@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { Preview } from "@/components/preview";
-import { File } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
@@ -59,9 +59,15 @@ const ChapterIdPage = async ({
   const attachments = await db.attachment.findMany({
     where: {
       courseId: params.courseId,
-      chapterId: params.chapterId,
     },
   });
+  if (attachments) {
+    console.log("Attachments Found.");
+  }
+
+  if (!attachments) {
+    console.error("No attachements found.");
+  }
 
   // Fetch user progress for the current chapter
   const userProgress = await db.userProgress.findUnique({
@@ -125,14 +131,16 @@ const ChapterIdPage = async ({
       </div>
       <div>
         <div className="p-4 flex flex-col md:flex-row items-center justify-between">
-          <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
           {purchase ? (
-            <CourseProgressButton
-              chapterId={params.chapterId}
-              courseId={params.courseId}
-              nextChapterId={course.chapters?.find(c => c.position > chapter.position)?.id}
-              isCompleted={!!userProgress?.isCompleted}
-            />
+            <div className=" items-center font-bold">
+              Course Status <CourseProgressButton
+                chapterId={params.chapterId}
+                courseId={params.courseId}
+                nextChapterId={course.chapters?.find(c => c.position > chapter.position)?.id}
+                isCompleted={!!userProgress?.isCompleted}
+              />
+            </div>
+
           ) : (
             <CourseEnrollButton
               courseId={params.courseId}
@@ -141,31 +149,26 @@ const ChapterIdPage = async ({
           )}
         </div>
         <Separator />
-        <div>
-          <Preview value={chapter.description!} />
+        <div className="p-4 font-bold">
+          Attachment Links are as below :
+          {attachments.map((attachment, index) => (
+            // <div key={attachment.id} className=" text-blue-600">
+            //   {attachment.url}
+            // </div>
+            <a
+              href={attachment.url}
+              target="_blank"
+              key={attachment.id}
+              className="flex items-center p-3 w-full bg-sky-200 border text-xl text-sky-600 mt-4 rounded-md hover:underline"
+            >
+              <p className="line-clamp-1 flex">
+                {index + 1}. {attachment.name} <Paperclip className="ml-4" />
+              </p>
+            </a>
+          ))}
         </div>
-        {!!attachments.length && (
-          <>
-            <Separator />
-            <div className="p-4">
-              {attachments.map((attachment) => (
-                <a
-                  href={attachment.url}
-                  target="_blank"
-                  key={attachment.id}
-                  className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
-                >
-                  <File />
-                  <p className="line-clamp-1">
-                    {attachment.name}
-                  </p>
-                </a>
-              ))}
-            </div>
-          </>
-        )}
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -26,7 +26,7 @@ const Slider: React.FC<SliderProps> = ({ sliderImages }) => {
     }, [sliderImages.length]);
 
     return (
-        <div className=" relative z-0 w-full mx-auto h-[70vh] py-4 overflow-hidden my-4">
+        <div className=" relative z-0 w-full mx-auto h-[40vh] sm:h-[60vh] lg:h-[75vh] overflow-hidden my-4">
             {sliderImages.map((image: string, index: number) => (
                 <div
                     key={index}

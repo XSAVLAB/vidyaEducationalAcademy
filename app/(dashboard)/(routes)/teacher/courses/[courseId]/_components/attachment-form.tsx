@@ -18,13 +18,14 @@ export const AttachmentForm = ({
   const [isEditing, setIsEditing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [attachmentLink, setAttachmentLink] = useState<string | null>(null);
+  const [attachmentName, setAttachmentName] = useState<string | null>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async () => {
     try {
-      if (attachmentLink) {
-        await axios.post(`/api/courses/${courseId}/attachments`, { url: attachmentLink });
+      if (attachmentLink && attachmentName) {
+        await axios.post(`/api/courses/${courseId}/attachments`, { url: attachmentLink, name: attachmentName });
         toast.success("Attachment added");
         toggleEdit();
         window.location.reload(); // Reload the page
@@ -124,10 +125,22 @@ export const AttachmentForm = ({
             <div className="font-medium flex text-start justify-start">
               PDF Attachment Link from Google Drive or Uploadthing Account
             </div>
+            <div className="font-medium flex text-start justify-start mt-4">
+              Attachment URL
+            </div>
             <input
               type="text"
               value={attachmentLink || ''}
               onChange={(e) => setAttachmentLink(e.target.value)}
+              className="mt-2 p-2 w-full bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
+            />
+            <div className="font-medium flex text-start justify-start mt-4">
+              Attachment Name
+            </div>
+            <input
+              type="text"
+              value={attachmentName || ''}
+              onChange={(e) => setAttachmentName(e.target.value)}
               className="mt-2 p-2 w-full bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
             />
             <div className="text-xs text-orange-500 mt-4">
@@ -139,22 +152,6 @@ export const AttachmentForm = ({
           </div>
         </div>
       )}
-      {/* {attachmentLink && (
-        <div className="mt-4 border bg-slate-100 rounded-md p-4">
-          <div className="font-medium flex items-center justify-between">
-            PDF Attachment Link from Google Drive or Uploadthing Account
-          </div>
-          <input
-            type="text"
-            value={attachmentLink}
-            className="mt-2 p-2 w-full bg-white border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
-            readOnly
-          />
-          <div className="text-xs text-red-500 mt-4">
-            Please provide the shareable PDF attachment link from your Google Drive or Uploadthing account for further processing.
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
