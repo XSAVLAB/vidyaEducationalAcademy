@@ -31,13 +31,13 @@ export const LandingPageNavbar = () => {
                                 <div className="text-2xs xs:text-sm font-medium md:text-sm">Commited to excellence in education</div>
                             </a>
                         </div>
-                        <div className='grid grid-cols-5 ml-4 sm:ml-0 px-4 gap-0 2xs:gap-2 w-full lg:w-1/2 text-2xs 2xs:text-xs sm:text-sm md:text-lg'>
-                            <div onClick={scrollDown} className=" cursor-pointer hover:text-sky-400">Home</div>
-                            <div onClick={clickAboutUs} className=" cursor-pointer hover:text-sky-400 ">About</div>
+                        <div className='grid grid-cols-5 mx-auto justify-center items-center w-full px-4 gap-0 2xs:gap-2 lg:w-1/2 text-2xs 2xs:text-xs sm:text-sm md:text-lg'>
+                            <div onClick={scrollDown} className=" ml-4 xs:ml-8 lg:ml-0 cursor-pointer hover:text-sky-400">Home</div>
+                            <div onClick={clickAboutUs} className=" ml-2 xs:ml-4 lg:ml-0 cursor-pointer hover:text-sky-400 ">About</div>
                             <div onClick={clickContactUs} className=" cursor-pointer hover:text-sky-400">Contact</div>
                             <div onClick={scrollDown2} className=' flex items-center w-auto cursor-pointer hover:text-sky-400'>
                                 <ImUserPlus className=' mr-1 sm:mr-2' /> Register</div>
-                            <div onClick={scrollDown} className=' flex items-center w-auto cursor-pointer hover:text-sky-400'>
+                            <div onClick={scrollDown} className=' flex ml-2 xs:ml-0 items-center w-auto cursor-pointer hover:text-sky-400'>
                                 Login <FaSignInAlt className=' ml-1 sm:ml-2' /></div>
                         </div>
                     </div>
