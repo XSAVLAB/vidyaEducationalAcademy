@@ -6,19 +6,19 @@ Welcome to the **Vidya Educational Academy**! 🎓🌟
 
 ### **Images**
 1. **From Google Drive**: (
-    https://drive.google.com/uc?id=1ebvRU9RMOseCuqLk4KJayXGW1L88Dbrf)
-   - Format: `(https://drive.google.com/uc?id=(Hash-ID-Of-File))`
+    `https://drive.google.com/uc?id=1ebvRU9RMOseCuqLk4KJayXGW1L88Dbrf`
+   - Format: `https://drive.google.com/uc?id=(Hash-ID-Of-File`
 
 2. **From Uploadthing**: 
-    (https://utfs.io/f/4f31cb75-202b-4a26-b363-07cf7f3cec08-xrmzoy.jpeg)
+    `https://utfs.io/f/4f31cb75-202b-4a26-b363-07cf7f3cec08-xrmzoy.jpeg`
 
 ### **PDF Files**
 1. **From Google Drive**:
-    (https://drive.google.com/file/d/1KdbDpzLdX17nCSxGqRx_jZF6RLCu2rZl/view?usp=sharing)
+    `https://drive.google.com/file/d/1KdbDpzLdX17nCSxGqRx_jZF6RLCu2rZl/view?usp=sharing`
    - Direct Shareable Drive URL Link
 
 2.  **From Uploadthing**:
-    (https://utfs.io/f/194ca938-5a4f-47a1-910f-32e7b17846ba-fosunf.pdf)
+    `https://utfs.io/f/194ca938-5a4f-47a1-910f-32e7b17846ba-fosunf.pdf`
 
 ### **Videos**
 1.   YouTube Video Link => Format: `https://youtube.com/embed/(Video-Hash-ID)` 
