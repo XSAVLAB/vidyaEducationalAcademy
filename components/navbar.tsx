@@ -32,7 +32,7 @@ export const LandingPageNavbar = () => {
                             </a>
                         </div>
                         <div className='grid grid-cols-5 ml-4 sm:ml-0 px-4 gap-0 2xs:gap-2 w-full lg:w-1/2 text-2xs 2xs:text-xs sm:text-sm md:text-lg'>
-                            <div className=" cursor-pointer hover:text-sky-400">Home</div>
+                            <div onClick={scrollDown} className=" cursor-pointer hover:text-sky-400">Home</div>
                             <div onClick={clickAboutUs} className=" cursor-pointer hover:text-sky-400 ">About</div>
                             <div onClick={clickContactUs} className=" cursor-pointer hover:text-sky-400">Contact</div>
                             <div onClick={scrollDown2} className=' flex items-center w-auto cursor-pointer hover:text-sky-400'>
