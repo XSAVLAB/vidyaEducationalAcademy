@@ -26,7 +26,7 @@ const Slider: React.FC<SliderProps> = ({ sliderImages }) => {
     }, [sliderImages.length]);
 
     return (
-        <div className=" relative z-0 w-full mx-auto h-[40vh] sm:h-[60vh] lg:h-[75vh] overflow-hidden my-4">
+        <div className=" relative z-0 w-full mx-auto h-[40vh] sm:h-[60vh] lg:h-[75vh] pt-4 overflow-hidden my-4">
             {sliderImages.map((image: string, index: number) => (
                 <div
                     key={index}
@@ -44,7 +44,18 @@ const Slider: React.FC<SliderProps> = ({ sliderImages }) => {
                 </div>
             ))}
 
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-2 items-center">
+            <div className="absolute top-0 left-1/2 mt-2 gap-4 transform -translate-x-1/2 flex items-center">
+                {sliderImages.map((_: string, index: number) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentImage(index)}
+                        className={`w-2 h-2 md:w-4 md:h-4 bg-sky-300 rounded-full focus:outline-none ${index === currentImage ? 'ring ring-blue-950' : ''
+                            }`}
+                    />
+                ))}
+            </div>
+
+            {/* <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 hidden space-x-2 items-center">
                 <div className=" hover:text-white cursor-pointer text-xl sm:text-2xl md:text-3xl bg-sky-300 flex h-auto p-1 md:p-2 shadow-sm shadow-black justify-center items-center rounded-full">
                     <FaChevronLeft onClick={handlePrev} />
                 </div>
@@ -59,7 +70,7 @@ const Slider: React.FC<SliderProps> = ({ sliderImages }) => {
                 <div className=" hover:text-white cursor-pointer text-xl sm:text-2xl md:text-3xl bg-sky-300 flex h-auto p-1 md:p-2 shadow-sm shadow-black justify-center items-center rounded-full">
                     <FaChevronRight onClick={handleNext} />
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

@@ -5,11 +5,11 @@ Welcome to the **Vidya Educational Academy**! 🎓🌟
 ## **Links for Uploading Files and Videos**
 
 ### **Images**
-1. **From Google Drive**: (
+1. **From Google Drive**:
     `https://drive.google.com/uc?id=1ebvRU9RMOseCuqLk4KJayXGW1L88Dbrf`
    - Format: `https://drive.google.com/uc?id=(Hash-ID-Of-File`
 
-2. **From Uploadthing**: 
+2. **From Uploadthing**:
     `https://utfs.io/f/4f31cb75-202b-4a26-b363-07cf7f3cec08-xrmzoy.jpeg`
 
 ### **PDF Files**
@@ -25,10 +25,10 @@ Welcome to the **Vidya Educational Academy**! 🎓🌟
     \(Use the 11-letter alphanumeric hash, not the playlist hash)
     E.g. `https://www.youtube.com/embed/PLpG1eJ8QSj`, etc.
 
-2. **From Uploadthing**: 
+2. **From Uploadthing**:
     Click on the file and directly use the URL.
 
-3. **From Google Drive**: 
+3. **From Google Drive**:
     Format: `https://drive.google.com/file/d/(Shareable-Drive-Video-HashID)/preview`
    - Example: `https://drive.google.com/file/d/1XySqF_kiCTExvUQMTfj-cB4ccf2SoZto/preview`
 
