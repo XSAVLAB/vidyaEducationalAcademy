@@ -113,18 +113,19 @@ const products = [
 const sections = [
     {
         heading: "Vision",
-        image: "https://drive.google.com/uc?id=1xYk36f9jzVRUNlBKXYsCl_rjAovZfB5R",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis lacus vitae nisi consequat vehicula. Fusce id leo quis augue aliquet tincidunt. Morbi quis nisl ut nisi malesuada rutrum. Curabitur quis augue id erat sagittis lacinia. Quisque vitae lectus quis nisi ullamcorper aliquet. Vivamus quis nunc id lorem consequat tincidunt. Sed quis semper nisl, quis consequat elit."
+        image: "https://drive.google.com/uc?id=1tldpZOpshJN52XBLpMboqPomANlzVlGm",
+        description: "Our Vision is to provide a transformative learning experience for teenagers preparing for competitive exams such as NEET, JEE, and NDA. We prioritize holistic learning by offering a comprehensive education that extends beyond exam syllabi, fostering critical thinking, problem-solving skills, and conceptual clarity. Our personalized coaching ensures that each student receives individualized attention tailored to their learning needs and pace. Through innovative teaching methods, including interactive sessions and technology integration, we make learning engaging and effective. We prioritize the mental and emotional well-being of our students, offering counseling support and stress management techniques. Upholding ethical practices, transparency, and fairness in all aspects of teaching and evaluation, we aim to empower students with the skills and knowledge needed for success. Continuous assessment and feedback help students improve continuously, while career guidance and community engagement ensure they are well-prepared for future academic and professional endeavors."
     },
     {
         heading: "Mission",
-        image: "https://drive.google.com/uc?id=1xYk36f9jzVRUNlBKXYsCl_rjAovZfB5R",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis lacus vitae nisi consequat vehicula. Fusce id leo quis augue aliquet tincidunt. Morbi quis nisl ut nisi malesuada rutrum. Curabitur quis augue id erat sagittis lacinia. Quisque vitae lectus quis nisi ullamcorper aliquet. Vivamus quis nunc id lorem consequat tincidunt. Sed quis semper nisl, quis consequat elit."
+        image: "https://drive.google.com/uc?id=1zR23PyOMICweIVMqvhEr2hbayfF9S2y5",
+        description: "Our mission is to prepare teenagers comprehensively for competitive exams like JEE, NEET, and NDA, aiming for top rankings such as AIR-1. We prioritize holistic learning, ensuring students develop critical thinking, problem-solving skills, and conceptual clarity alongside exam syllabi. Through personalized attention, innovative teaching methods, and a supportive environment, we foster student well-being and growth. Upholding ethical standards, providing continuous assessment and feedback, offering career guidance, and engaging with the community, we aim to empower students not only to excel in exams but also to succeed in their future academic and professional endeavors."
     },
     {
         heading: "History",
-        image: "https://drive.google.com/uc?id=1xYk36f9jzVRUNlBKXYsCl_rjAovZfB5R",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis lacus vitae nisi consequat vehicula. Fusce id leo quis augue aliquet tincidunt. Morbi quis nisl ut nisi malesuada rutrum. Curabitur quis augue id erat sagittis lacinia. Quisque vitae lectus quis nisi ullamcorper aliquet. Vivamus quis nunc id lorem consequat tincidunt. Sed quis semper nisl, quis consequat elit."
+        image: "https://drive.google.com/uc?id=1S723oVYr_Ckuv_DVoDBdW9xtvRZIAUJl",
+        // image: "https://drive.google.com/uc?id=1fmhbGo7Wp9c91RbyGReaZmm2k8bUUzFf",
+        description: "Founded in 2019 in Nashik, Vidya Educational Academy stands as a testament to the vision and dedication of Late. Vidya Devi, who despite battling cancer until her passing in 2019, devoted her life to ensuring quality education for her child. Believing fervently that education is the cornerstone of societal progress and upliftment, she instilled in her child the values of knowledge and service. Named in her honor, the academy embodies her unwavering commitment to education. Since its inception, Vidya Educational Academy has been a beacon of excellence, striving to prepare teenagers for a future of success and leadership. With a focus on comprehensive preparation for competitive exams such as JEE, NEET, and NDA, the academy aims not just for excellence but for AIR-1 rankings, shaping students to excel in the medical, engineering, and defense sectors. The history of Vidya Educational Academy is not just one of academic achievement but also a tribute to the indomitable spirit of a mother's love and perseverance in the face of adversity.",
     },
 ];
 
@@ -189,13 +190,13 @@ const Page = () => {
     return (
         <div className="flex flex-col w-screen bg-blue-200 h-auto items-center justify-between text-blue-950 px-4 sm:px-16">
             <div className="text-3xl md:text-4xl lg:text-5xl py-4 font-bold mt-5 sm:mt-10">About - Us</div>
-            <div className=" grid sm:grid-cols-3 overflow-x-auto w-full h-auto sm:gap-8 my-8">
+            <div className=" grid sm:grid-cols-3 items-center justify-center overflow-x-auto w-full text-blue-100 p-4 h-auto sm:gap-8 my-8">
                 {sections.map((section, index) => (
-                    <div key={index} className="flex flex-col items-center justify-center pb-4 sm:pb-10 mx-auto w-full h-auto">
+                    <div key={index} className="flex flex-col px-10 items-center justify-center mx-auto bg-blue-950 rounded-xl pb-4 sm:pb-10 w-full h-auto">
                         <div className="text-xl my-1 sm:my-2 sm:text-3xl text-center font-semibold mt-4">{section.heading}</div>
-                        <div className="text-xs sm:text-lg text-center my-4 sm:my-8">{section.description}</div>
-                        <div className="w-full">
-                            <Image src={section.image} alt={section.heading} width={500} height={240} className="mt-4 rounded-xl shadow-xl shadow-black" />
+                        <div className="text-xs sm:text-sm text-start font-sans my-4 sm:my-4">{section.description}</div>
+                        <div className="w-full h-auto items-center justify-center">
+                            <Image src={section.image} alt={section.heading} width={500} height={240} className="mt-4 items-center justify-center rounded-xl shadow-xl shadow-black" />
                         </div>
                     </div>
                 ))}
